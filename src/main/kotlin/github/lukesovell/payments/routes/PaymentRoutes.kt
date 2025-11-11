@@ -1,21 +1,23 @@
 package github.lukesovell.payments.routes
 
-import io.ktor.server.application.Application
-import io.ktor.server.response.respondText
-import io.ktor.server.routing.Route
-import io.ktor.server.routing.get
-import io.ktor.server.routing.post
-import io.ktor.server.routing.routing
+import github.lukesovell.payments.service.PaymentService
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import org.koin.ktor.ext.inject
 
 fun Route.paymentsById() {
+    val service by inject<PaymentService>()
     get("/payments/{id}") {
-        call.respondText(text = "You called the payments API!")
+        val id = call.parameters["id"] ?: throw IllegalArgumentException("Id parameter can't be null")
+        call.respond(HttpStatusCode.OK, service.getByIdInCurrency(id, "USD"))
     }
 }
 
 fun Route.createPayment() {
     post("/payments") {
-        call.respondText(text = "You called the payments API!")
+        call.respond(HttpStatusCode.Created)
     }
 }
 
