@@ -17,7 +17,7 @@ class PaymentServiceImpl : PaymentService {
         )
     }
 
-    override fun createPayment(payment: PaymentDto) {
-        // stub
+    override fun createPayment(payment: PaymentDto): PaymentDto {
+        return payment
     }
 }

@@ -4,5 +4,5 @@ interface PaymentService {
 
     fun getByIdInCurrency(id: String, currency: String) : PaymentDto
 
-    fun createPayment(payment: PaymentDto)
+    fun createPayment(payment: PaymentDto) : PaymentDto
 }
