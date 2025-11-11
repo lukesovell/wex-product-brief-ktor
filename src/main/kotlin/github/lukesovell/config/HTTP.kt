@@ -1,4 +1,4 @@
-package github.lukesovell
+package github.lukesovell.config
 
 import io.ktor.server.application.*
 import io.ktor.server.plugins.swagger.*

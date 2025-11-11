@@ -1,5 +1,7 @@
-package github.lukesovell
+package github.lukesovell.config
 
+import github.lukesovell.City
+import github.lukesovell.CityService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
