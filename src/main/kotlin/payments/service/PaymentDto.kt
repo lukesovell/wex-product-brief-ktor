@@ -1,8 +1,6 @@
 package github.lukesovell.payments.service
 
-import github.lukesovell.payments.repository.PaymentEntity
 import kotlinx.serialization.Serializable
-import java.math.BigDecimal
 import java.util.*
 
 @Serializable
@@ -21,16 +19,6 @@ data class PaymentDto(
         createDto.purchaseAmount,
         "USD"
     )
-
-    fun toEntity(): PaymentEntity {
-        return PaymentEntity(
-            id,
-            description,
-            transactionDate,
-            BigDecimal(purchaseAmount),
-            currency
-        )
-    }
 }
 
 @Serializable
