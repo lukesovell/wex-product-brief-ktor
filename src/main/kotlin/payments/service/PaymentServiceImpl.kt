@@ -1,9 +1,13 @@
 package github.lukesovell.payments.service
 
+import github.lukesovell.exchangeRate.ExchangeRateService
 import github.lukesovell.payments.repository.PaymentRepository
 import java.math.BigDecimal
 
-class PaymentServiceImpl(val repository: PaymentRepository) : PaymentService {
+class PaymentServiceImpl(
+    val repository: PaymentRepository,
+    val exchangeRateService: ExchangeRateService
+) : PaymentService {
 
     override fun getByIdInCurrency(
         id: String,
@@ -17,8 +21,7 @@ class PaymentServiceImpl(val repository: PaymentRepository) : PaymentService {
     }
 
     fun getAmountInCurrency(purchaseAmount: BigDecimal, currency: String): BigDecimal {
-        // todo get converted currency
-        return purchaseAmount
+        return exchangeRateService.convert(purchaseAmount, currency)
     }
 
     override fun createPayment(payment: PaymentDto): PaymentDto {
