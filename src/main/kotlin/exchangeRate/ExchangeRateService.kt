@@ -7,5 +7,5 @@ interface ExchangeRateService {
     /**
      * Converts the input USD dollar amount into the desired currency
      */
-    fun convert(amount: BigDecimal, currency: String): BigDecimal
+    fun convert(amount: BigDecimal, currency: String, date: String): BigDecimal
 }

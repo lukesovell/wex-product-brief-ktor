@@ -6,7 +6,7 @@ import github.lukesovell.config.configureHTTP
 import github.lukesovell.config.networkModule
 import github.lukesovell.payments.di.paymentModule
 import github.lukesovell.payments.routes.paymentRoutes
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
@@ -22,11 +22,7 @@ fun main(args: Array<String>) {
 fun Application.module() {
     configureHTTP()
 //    configureDatabases()
-    paymentRoutes()
-
-    startKoin {
-        modules(paymentModule, networkModule)
-    }
+    paymentRoutes() // TODO modularize routes
 
     install(ContentNegotiation) {
         json(Json {
@@ -37,5 +33,9 @@ fun Application.module() {
             prettyPrint = true
             ignoreUnknownKeys = true
         })
+    }
+
+    startKoin {
+        modules(paymentModule, networkModule)
     }
 }

@@ -7,6 +7,11 @@ import java.math.BigDecimal
 import java.time.LocalDate
 
 @Serializable
+data class ExchangeRateResponse(
+    val data: List<ExchangeRate>
+)
+
+@Serializable
 data class ExchangeRate(
     @SerialName("country_currency_desc") val countryCurrencyDesc: String,
     @Contextual @SerialName("exchange_rate") val exchangeRate: BigDecimal,

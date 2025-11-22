@@ -3,6 +3,9 @@ package github.lukesovell.payments.service
 import github.lukesovell.exchangeRate.ExchangeRateService
 import github.lukesovell.payments.repository.PaymentRepository
 import java.math.BigDecimal
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class PaymentServiceImpl(
     val repository: PaymentRepository,
@@ -14,14 +17,26 @@ class PaymentServiceImpl(
         currency: String
     ): PaymentDto {
         val paymentEntity = repository.getPayment(id)
-        val convertedPurchaseAmt = getAmountInCurrency(paymentEntity.purchaseAmount, currency)
+        val convertedPurchaseAmt = getAmountInCurrency(
+            paymentEntity.purchaseAmount,
+            currency,
+            paymentEntity.transactionDate
+        )
 
         val dtoInUsd = mapToDto(paymentEntity)
         return dtoInUsd.copy(purchaseAmount = convertedPurchaseAmt.toString(), currency = currency)
     }
 
-    fun getAmountInCurrency(purchaseAmount: BigDecimal, currency: String): BigDecimal {
-        return exchangeRateService.convert(purchaseAmount, currency)
+    fun getAmountInCurrency(purchaseAmount: BigDecimal, currency: String, date: Long): BigDecimal {
+        val dateString = epochToDateString(date)
+        return exchangeRateService.convert(purchaseAmount, currency, dateString)
+    }
+
+    fun epochToDateString(epochMillis: Long): String {
+        val instant = Instant.ofEpochMilli(epochMillis)
+        val zonedDateTime = instant.atZone(ZoneId.systemDefault())
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return formatter.format(zonedDateTime)
     }
 
     override fun createPayment(payment: PaymentDto): PaymentDto {
