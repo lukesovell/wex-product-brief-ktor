@@ -2,6 +2,7 @@ package github.lukesovell
 
 import github.lukesovell.config.BigDecimalSerializer
 import github.lukesovell.config.LocalDateSerializer
+import github.lukesovell.config.configureDatabases
 import github.lukesovell.config.configureHTTP
 import github.lukesovell.config.networkModule
 import github.lukesovell.payments.di.paymentModule
@@ -21,7 +22,7 @@ fun main(args: Array<String>) {
 
 fun Application.module() {
     configureHTTP()
-//    configureDatabases()
+    configureDatabases()
     paymentRoutes() // TODO modularize routes
 
     install(ContentNegotiation) {

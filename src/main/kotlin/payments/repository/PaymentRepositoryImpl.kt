@@ -1,23 +1,33 @@
 package github.lukesovell.payments.repository
 
-import java.math.BigDecimal
-import java.time.Instant
+import org.jetbrains.exposed.sql.transactions.transaction
+import java.util.*
 
 class PaymentRepositoryImpl : PaymentRepository {
 
     override fun getPayment(id: String): PaymentEntity {
-        // select * from payment where id = {id};
-        return PaymentEntity(
-            id = id,
-            "Test",
-            Instant.now().toEpochMilli(),
-            BigDecimal("100.00"),
-            "USD"
-        )
+        val result = transaction {
+            PaymentDAO.findById(UUID.fromString(id))
+                ?.let { daoToEntity(it) }
+        }
+
+        if (result == null) {
+            throw IllegalStateException("Payment with id $id not found")
+        }
+
+        return result
     }
 
     override fun createPayment(payment: PaymentEntity): PaymentEntity {
-        // insert into payment (...) values (...);
-        return payment
+        val result = transaction {
+            PaymentDAO.new(UUID.fromString(payment.id)) {
+                description = payment.description
+                transactionDate = payment.transactionDate
+                purchaseAmount = payment.purchaseAmount
+                currency = payment.currency
+            }
+        }
+
+        return daoToEntity(result)
     }
 }
