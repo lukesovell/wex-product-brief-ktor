@@ -4,13 +4,10 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.runBlocking
-import org.slf4j.LoggerFactory
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 class ExchangeRateServiceImpl(val client: HttpClient) : ExchangeRateService {
-
-    private val logger = LoggerFactory.getLogger("ExchangeRateServiceImpl")
 
     // TODO make this configurable
     val baseUrl = "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/rates_of_exchange"
