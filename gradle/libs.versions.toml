@@ -1,12 +1,15 @@
 [versions]
 kotlin = "2.2.20"
 ktor = "3.3.1"
+hoplite = "2.9.0"
 logback = "1.4.14"
 exposed = "0.41.1"
 postgres = "42.7.8"
 koin-bom = "4.1.1"
 
 [libraries]
+hoplite-core = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite"}
+hoplite-yaml = { module = "com.sksamuel.hoplite:hoplite-yaml", version.ref = "hoplite"}
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
 ktor-server-swagger = { module = "io.ktor:ktor-server-swagger", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }

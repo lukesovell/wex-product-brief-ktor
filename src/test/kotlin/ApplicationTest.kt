@@ -5,6 +5,8 @@ import kotlin.test.Test
 
 class ApplicationTest {
 
+    // TODO: come back to tests using testcontainers
+
 //    @Test
 //    fun testRoot() = testApplication {
 //        application {

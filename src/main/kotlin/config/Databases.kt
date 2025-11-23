@@ -1,14 +1,13 @@
 package github.lukesovell.config
 
-import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
 
 // TODO add hikari for connection pooling
-fun Application.configureDatabases() {
+fun configureDatabases(config: DatabaseConfig) {
     Database.connect(
-        environment.config.property("postgres.url").getString(),
+        config.url,
         driver = "org.postgresql.Driver",
-        user = environment.config.property("postgres.user").getString(),
-        password = environment.config.property("postgres.password").getString()
+        user = config.user,
+        password = config.password
     )
 }

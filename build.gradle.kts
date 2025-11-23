@@ -8,7 +8,7 @@ group = "github.lukesovell"
 version = "0.0.1"
 
 application {
-    mainClass = "io.ktor.server.netty.EngineMain"
+    mainClass = "github.lukesovell.ApplicationKt"
 }
 
 dependencies {
@@ -19,6 +19,8 @@ dependencies {
     implementation(libs.ktor.client.cn)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.server.content.negotiation)
+    implementation(libs.hoplite.core)
+    implementation(libs.hoplite.yaml)
     implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.ktor)
     implementation(libs.koin.core)

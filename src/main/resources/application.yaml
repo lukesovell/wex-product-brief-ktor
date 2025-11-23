@@ -1,10 +1,10 @@
-ktor:
-    application:
-        modules:
-            - github.lukesovell.ApplicationKt.module
-    deployment:
-        port: 8080
-postgres:
+server:
+  port: 8080
+
+database:
   url: "jdbc:postgresql://db:5432/default"
   user: test
   password: test
+
+exchangeRates:
+  url: "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/rates_of_exchange"

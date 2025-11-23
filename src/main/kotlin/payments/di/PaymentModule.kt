@@ -9,7 +9,7 @@ import github.lukesovell.payments.service.PaymentServiceImpl
 import org.koin.dsl.module
 
 val paymentModule = module {
-    single<ExchangeRateService> { ExchangeRateServiceImpl(get()) }
+    single<ExchangeRateService> { ExchangeRateServiceImpl(get(), get()) }
     single<PaymentRepository> { PaymentRepositoryImpl() }
     single<PaymentService> { PaymentServiceImpl(get(), get()) }
 }
