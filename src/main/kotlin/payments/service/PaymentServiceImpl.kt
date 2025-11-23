@@ -12,7 +12,7 @@ class PaymentServiceImpl(
     val exchangeRateService: ExchangeRateService
 ) : PaymentService {
 
-    override fun getByIdInCurrency(
+    override suspend fun getByIdInCurrency(
         id: String,
         currency: String
     ): PaymentDto {
@@ -27,12 +27,12 @@ class PaymentServiceImpl(
         return dtoInUsd.copy(purchaseAmount = convertedPurchaseAmt.toString(), currency = currency)
     }
 
-    fun getAmountInCurrency(purchaseAmount: BigDecimal, currency: String, date: Long): BigDecimal {
+    private suspend fun getAmountInCurrency(purchaseAmount: BigDecimal, currency: String, date: Long): BigDecimal {
         val dateString = epochToDateString(date)
         return exchangeRateService.convert(purchaseAmount, currency, dateString)
     }
 
-    fun epochToDateString(epochMillis: Long): String {
+    private fun epochToDateString(epochMillis: Long): String {
         val instant = Instant.ofEpochMilli(epochMillis)
         val zonedDateTime = instant.atZone(ZoneId.systemDefault())
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")

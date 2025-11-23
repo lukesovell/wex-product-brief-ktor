@@ -25,7 +25,6 @@ class PaymentDAO(id: EntityID<UUID>) : UUIDEntity(id) {
     var currency by PaymentTable.currency
 }
 
-// Is this extra mapping necessary?
 fun daoToEntity(dao: PaymentDAO) = PaymentEntity(
     dao.id.toString(),
     dao.description,

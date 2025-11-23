@@ -4,8 +4,7 @@ import github.lukesovell.payments.service.CreatePaymentDto
 import github.lukesovell.payments.service.PaymentDto
 import github.lukesovell.payments.service.PaymentService
 import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.request.receive
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
@@ -25,12 +24,5 @@ fun Route.createPayment() {
         val payment = call.receive<CreatePaymentDto>()
         val createdPayment = service.createPayment(PaymentDto(payment))
         call.respond(HttpStatusCode.Created, createdPayment)
-    }
-}
-
-fun Application.paymentRoutes() {
-    routing {
-        paymentsById()
-        createPayment()
     }
 }
