@@ -1,5 +1,6 @@
 package github.lukesovell.payments.routes
 
+import github.lukesovell.payments.constant.USD_CURRENCY_DESC
 import github.lukesovell.payments.service.CreatePaymentDto
 import github.lukesovell.payments.service.PaymentDto
 import github.lukesovell.payments.service.PaymentService
@@ -13,7 +14,7 @@ fun Route.paymentsById() {
     val service by inject<PaymentService>()
     get("/payments/{id}") {
         val id = call.parameters["id"] ?: throw IllegalArgumentException("Id parameter can't be null")
-        val currency = call.request.queryParameters["currency"] ?: "USD"
+        val currency = call.request.queryParameters["currency"] ?: USD_CURRENCY_DESC
         call.respond(HttpStatusCode.OK, service.getByIdInCurrency(id, currency))
     }
 }

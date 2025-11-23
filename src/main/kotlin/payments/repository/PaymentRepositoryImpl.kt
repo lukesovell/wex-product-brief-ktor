@@ -8,7 +8,7 @@ class PaymentRepositoryImpl : PaymentRepository {
     override fun getPayment(id: String): PaymentEntity {
         val result = transaction {
             PaymentDAO.findById(UUID.fromString(id))
-                ?.let { daoToEntity(it) }
+                ?.let { mapDaoToEntity(it) }
         }
 
         if (result == null) {
@@ -28,6 +28,6 @@ class PaymentRepositoryImpl : PaymentRepository {
             }
         }
 
-        return daoToEntity(result)
+        return mapDaoToEntity(result)
     }
 }

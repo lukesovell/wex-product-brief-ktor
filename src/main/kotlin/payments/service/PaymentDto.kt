@@ -1,5 +1,6 @@
 package github.lukesovell.payments.service
 
+import github.lukesovell.payments.constant.USD_CURRENCY_DESC
 import kotlinx.serialization.Serializable
 import java.util.*
 
@@ -17,7 +18,7 @@ data class PaymentDto(
         createDto.description,
         createDto.transactionDate,
         createDto.purchaseAmount,
-        "USD"
+        USD_CURRENCY_DESC
     )
 }
 

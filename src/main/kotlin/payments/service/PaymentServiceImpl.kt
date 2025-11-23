@@ -33,10 +33,10 @@ class PaymentServiceImpl(
     }
 
     private fun epochToDateString(epochMillis: Long): String {
-        val instant = Instant.ofEpochMilli(epochMillis)
-        val zonedDateTime = instant.atZone(ZoneId.systemDefault())
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        return formatter.format(zonedDateTime)
+        return Instant.ofEpochMilli(epochMillis)
+            .atZone(ZoneId.systemDefault())
+            .let { formatter.format(it) }
     }
 
     override fun createPayment(payment: PaymentDto): PaymentDto {

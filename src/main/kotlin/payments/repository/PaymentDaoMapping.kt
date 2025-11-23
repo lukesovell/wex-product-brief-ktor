@@ -25,7 +25,7 @@ class PaymentDAO(id: EntityID<UUID>) : UUIDEntity(id) {
     var currency by PaymentTable.currency
 }
 
-fun daoToEntity(dao: PaymentDAO) = PaymentEntity(
+fun mapDaoToEntity(dao: PaymentDAO) = PaymentEntity(
     dao.id.toString(),
     dao.description,
     dao.transactionDate,
