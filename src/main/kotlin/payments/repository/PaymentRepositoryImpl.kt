@@ -22,7 +22,7 @@ class PaymentRepositoryImpl : PaymentRepository {
         return result.toDto()
     }
 
-    override fun getPaymentsOverPurchaseAmountInCurrency(threshold: BigDecimal, sinceDate: Long): List<PaymentDto> {
+    override fun getPaymentsOverPurchaseAmountSinceDate(threshold: BigDecimal, sinceDate: Long): List<PaymentDto> {
         val results = transaction {
             PaymentEntity.find {
                 (PaymentTable.purchaseAmount greater threshold) and (PaymentTable.transactionDate lessEq sinceDate)

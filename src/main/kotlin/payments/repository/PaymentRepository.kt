@@ -9,7 +9,7 @@ interface PaymentRepository {
     fun getPayment(id: String): PaymentDto
 
     // Not used, random query just for fun :)
-    fun getPaymentsOverPurchaseAmountInCurrency(threshold: BigDecimal, sinceDate: Long) : List<PaymentDto>
+    fun getPaymentsOverPurchaseAmountSinceDate(threshold: BigDecimal, sinceDate: Long) : List<PaymentDto>
 
     fun createPayment(payment: CreatePaymentDto): PaymentDto
 }
