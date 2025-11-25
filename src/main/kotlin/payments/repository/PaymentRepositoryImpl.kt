@@ -3,6 +3,7 @@ package github.lukesovell.payments.repository
 import github.lukesovell.payments.constant.USD_CURRENCY_DESC
 import github.lukesovell.payments.service.CreatePaymentDto
 import github.lukesovell.payments.service.PaymentDto
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.math.BigDecimal
 import java.util.*
@@ -19,6 +20,16 @@ class PaymentRepositoryImpl : PaymentRepository {
         }
 
         return result.toDto()
+    }
+
+    override fun getPaymentsOverPurchaseAmountInCurrency(threshold: BigDecimal, sinceDate: Long): List<PaymentDto> {
+        val results = transaction {
+            PaymentEntity.find {
+                (PaymentTable.purchaseAmount greater threshold) and (PaymentTable.transactionDate lessEq sinceDate)
+            }
+        }
+
+        return results.map { it.toDto() }
     }
 
     override fun createPayment(payment: CreatePaymentDto): PaymentDto {
