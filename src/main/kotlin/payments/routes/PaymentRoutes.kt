@@ -2,7 +2,6 @@ package github.lukesovell.payments.routes
 
 import github.lukesovell.payments.constant.USD_CURRENCY_DESC
 import github.lukesovell.payments.service.CreatePaymentDto
-import github.lukesovell.payments.service.PaymentDto
 import github.lukesovell.payments.service.PaymentService
 import io.ktor.http.*
 import io.ktor.server.request.*
@@ -23,7 +22,7 @@ fun Route.createPayment() {
     post("/payments") {
         val service by inject<PaymentService>()
         val payment = call.receive<CreatePaymentDto>()
-        val createdPayment = service.createPayment(PaymentDto(payment))
+        val createdPayment = service.createPayment(payment)
         call.respond(HttpStatusCode.Created, createdPayment)
     }
 }

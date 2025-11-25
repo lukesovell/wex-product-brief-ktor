@@ -12,19 +12,18 @@ class PaymentServiceImpl(
     val exchangeRateService: ExchangeRateService
 ) : PaymentService {
 
-    override suspend fun getByIdInCurrency(
-        id: String,
-        currency: String
-    ): PaymentDto {
-        val paymentEntity = repository.getPayment(id)
+    override suspend fun getByIdInCurrency(id: String, currency: String): PaymentDto {
+        val paymentDto = repository.getPayment(id)
         val convertedPurchaseAmt = getAmountInCurrency(
-            paymentEntity.purchaseAmount,
+            BigDecimal(paymentDto.purchaseAmount),
             currency,
-            paymentEntity.transactionDate
+            paymentDto.transactionDate
         )
 
-        val dtoInUsd = mapToDto(paymentEntity)
-        return dtoInUsd.copy(purchaseAmount = convertedPurchaseAmt.toString(), currency = currency)
+        return paymentDto.copy(
+            purchaseAmount = convertedPurchaseAmt.toString(),
+            currency = currency
+        )
     }
 
     private suspend fun getAmountInCurrency(purchaseAmount: BigDecimal, currency: String, date: Long): BigDecimal {
@@ -39,9 +38,7 @@ class PaymentServiceImpl(
             .let { formatter.format(it) }
     }
 
-    override fun createPayment(payment: PaymentDto): PaymentDto {
-        val entity = mapToEntity(payment)
-        repository.createPayment(entity)
-        return mapToDto(entity)
+    override fun createPayment(payment: CreatePaymentDto): PaymentDto {
+        return repository.createPayment(payment)
     }
 }
