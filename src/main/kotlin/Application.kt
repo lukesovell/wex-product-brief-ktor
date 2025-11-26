@@ -30,8 +30,8 @@ fun main() {
 
 fun Application.module(config: AppConfig) {
     configureHTTP()
-    configureDatabases(config.database)
     configureRoutes()
+    val jdbi = configureDatabases(config.database)
 
     install(ContentNegotiation) {
         json(Json {
@@ -45,7 +45,7 @@ fun Application.module(config: AppConfig) {
     }
 
     startKoin {
-        modules(configModule(config), paymentModule, networkModule)
+        modules(configModule(config, jdbi), paymentModule, networkModule)
     }
 }
 

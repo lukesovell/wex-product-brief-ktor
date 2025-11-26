@@ -3,45 +3,56 @@ package github.lukesovell.payments.repository
 import github.lukesovell.payments.constant.USD_CURRENCY_DESC
 import github.lukesovell.payments.service.CreatePaymentDto
 import github.lukesovell.payments.service.PaymentDto
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jdbi.v3.core.Jdbi
+import org.jdbi.v3.core.kotlin.mapTo
+import org.jdbi.v3.core.kotlin.useHandleUnchecked
+import org.jdbi.v3.core.kotlin.withHandleUnchecked
 import java.math.BigDecimal
 import java.util.*
 
-class PaymentRepositoryImpl : PaymentRepository {
+class PaymentRepositoryImpl(val jdbi: Jdbi) : PaymentRepository {
 
     override fun getPayment(id: String): PaymentDto {
-        val result = transaction {
-            PaymentEntity.findById(UUID.fromString(id))
+        val result = jdbi.withHandleUnchecked { handle ->
+            handle.createQuery("SELECT * FROM payment WHERE id = :id")
+                .bind("id", UUID.fromString(id))
+                .mapTo<PaymentEntity>()
+                .findOne()
         }
 
-        if (result == null) {
+        if (result.isEmpty) {
             throw IllegalStateException("Payment with id $id not found")
         }
 
-        return result.toDto()
+        return result.get().toDto()
     }
 
     override fun getPaymentsOverPurchaseAmountSinceDate(threshold: BigDecimal, sinceDate: Long): List<PaymentDto> {
-        val results = transaction {
-            PaymentEntity.find {
-                (PaymentTable.purchaseAmount greater threshold) and (PaymentTable.transactionDate lessEq sinceDate)
-            }
+        val results = jdbi.withHandleUnchecked { handle ->
+            handle.createQuery("SELECT * FROM payment WHERE purchase_amount > :threshold and transaction_date > :sinceDate")
+                .bind("threshold", threshold)
+                .bind("sinceDate", sinceDate)
+                .mapTo<PaymentEntity>()
+                .list()
         }
 
         return results.map { it.toDto() }
     }
 
     override fun createPayment(payment: CreatePaymentDto): PaymentDto {
-        val result = transaction {
-            PaymentEntity.new {
-                description = payment.description
-                transactionDate = payment.transactionDate
-                purchaseAmount = BigDecimal(payment.purchaseAmount)
-                currency = USD_CURRENCY_DESC
-            }
+        val id = UUID.randomUUID()
+        jdbi.useHandleUnchecked { handle ->
+            handle.createUpdate(
+                """INSERT INTO payment (id, description, transaction_date, purchase_amount, currency)
+                 VALUES (:id, :description, :transactionDate, :purchaseAmount, :currency)""")
+                .bind("id", id)
+                .bind("description", payment.description)
+                .bind("transactionDate", payment.transactionDate)
+                .bind("purchaseAmount", payment.purchaseAmount.toFloat())
+                .bind("currency", USD_CURRENCY_DESC)
+                .execute()
         }
 
-        return result.toDto()
+        return PaymentDto(id.toString(), payment.description, payment.transactionDate, payment.purchaseAmount, USD_CURRENCY_DESC)
     }
 }

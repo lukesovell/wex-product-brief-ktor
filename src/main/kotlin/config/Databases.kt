@@ -1,12 +1,9 @@
 package github.lukesovell.config
 
-import org.jetbrains.exposed.sql.Database
+import org.jdbi.v3.core.Jdbi
+import org.jdbi.v3.core.kotlin.KotlinPlugin
 
-fun configureDatabases(config: DatabaseConfig) {
-    Database.connect(
-        config.url,
-        driver = "org.postgresql.Driver",
-        user = config.user,
-        password = config.password
-    )
+fun configureDatabases(config: DatabaseConfig) : Jdbi {
+    return Jdbi.create(config.url, config.user, config.password)
+        .also { it.installPlugin(KotlinPlugin()) }
 }
