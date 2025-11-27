@@ -30,8 +30,8 @@ fun main() {
 
 fun Application.module(config: AppConfig) {
     configureHTTP()
-    configureDatabases(config.database)
     configureRoutes()
+    val dslContext = configureDatabases(config.database)
 
     install(ContentNegotiation) {
         json(Json {
@@ -45,7 +45,8 @@ fun Application.module(config: AppConfig) {
     }
 
     startKoin {
-        modules(configModule(config), paymentModule, networkModule)
+        // TODO: make database module for dslContext koin setup
+        modules(configModule(config, dslContext), paymentModule, networkModule)
     }
 }
 

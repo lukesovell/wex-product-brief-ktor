@@ -10,6 +10,6 @@ import org.koin.dsl.module
 
 val paymentModule = module {
     single<ExchangeRateService> { ExchangeRateServiceImpl(get(), get()) }
-    single<PaymentRepository> { PaymentRepositoryImpl() }
+    single<PaymentRepository> { PaymentRepositoryImpl(get()) }
     single<PaymentService> { PaymentServiceImpl(get(), get()) }
 }

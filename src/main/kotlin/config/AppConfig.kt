@@ -1,5 +1,6 @@
 package github.lukesovell.config
 
+import org.jooq.DSLContext
 import org.koin.dsl.module
 
 data class AppConfig(
@@ -18,7 +19,8 @@ data class DatabaseConfig(
 
 data class ExchangeRateApiConfig(val url: String)
 
-fun configModule(config: AppConfig) = module {
+fun configModule(config: AppConfig, dslContext: DSLContext) = module {
     single { config.database }
     single { config.exchangeRates }
+    single { dslContext }
 }
